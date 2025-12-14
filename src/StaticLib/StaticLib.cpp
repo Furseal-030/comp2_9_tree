@@ -70,6 +70,37 @@ bool add(tree* t, int key, const char* value)
 
 	// Todo: t->rootの下にkeyの値の大小でleftかrightを切り替えながらpを追加する処理を実装する
 
+	node* current = t->root;
+	while (true) 
+	{
+		if (key == current->key) 
+		{
+			//同じキーなら値を上書き
+			memcpy(current->value, value, strlen(value) + 1);
+			free(p);
+			return true;
+		}
+		else if (key < current->key)
+		{
+			if (current->left == NULL)
+			{
+				current->left = p;
+				return true;
+			}
+			current = current->left;
+		}
+		else 
+		{
+			if (current->right == NULL)
+			{
+				current->right = p;
+				return true;
+			}
+			current = current->right;
+		}
+	}
+
+
 	return true;
 }
 
@@ -77,6 +108,21 @@ bool add(tree* t, int key, const char* value)
 const char* find(const tree* t, int key)
 {
 	// ToDo: 実装する
+	if (t == NULL || t->root == NULL) return NULL;
+
+	node* current = t->root;
+	while (current != NULL) {
+		if (key == current->key) {
+			return current->value; //見つかった
+		}
+		else if (key < current->key) {
+			current = current->left; //左へ進む
+		}
+		else {
+			current = current->right; //右へ進む
+		}
+	}
+
 	return NULL;
 }
 
@@ -84,4 +130,19 @@ const char* find(const tree* t, int key)
 void search(const tree* t, void (*func)(const node* p))
 {
 	// ToDo: 実装する
+	if (t == NULL || t->root == NULL) return;
+
+	const node* n = t->root;
+	if (n->left) {
+		tree leftTree = { n->left };
+		search(&leftTree, func);
+	}
+
+	func(n);
+
+	if (n->right) {
+		tree rightTree = { n->right };
+		search(&rightTree, func);
+	}
+	//左、自分、右
 }
