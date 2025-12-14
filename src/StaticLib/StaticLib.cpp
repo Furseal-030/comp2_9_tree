@@ -144,5 +144,5 @@ void search(const tree* t, void (*func)(const node* p))
 		tree rightTree = { n->right };
 		search(&rightTree, func);
 	}
-	//左、自分、右
+	//左→自分→右
 }
